@@ -5,44 +5,46 @@ using UnityEngine;
 public class Food : MonoBehaviour
 {
     private bool isDragging = false;
-    private Vector3 offset;
+    private Rigidbody rb;
+
+    void Start()
+    {
+
+        // Eğer nesnenin üzerinde Rigidbody bileşeni yoksa ekleyelim.
+        if (!TryGetComponent(out rb))
+        {
+            rb = gameObject.AddComponent<Rigidbody>();
+           // rb.isKinematic = false; // Nesnenin fiziksel davranışını etkinleştirir.
+        }
+    }   
 
     void Update()
     {
-        // Sol fare tuşuna basıldığında
         if (Input.GetMouseButtonDown(0))
         {
-            RaycastHit hit;
+            // Fare tıklandığında objenin üzerinde mi kontrol et.
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
 
-            // Raycast kullanarak fare pozisyonuna tıklanan objeyi kontrol et
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out hit) && hit.collider.gameObject == gameObject)
             {
-                // Tıklanan nesne bu scriptin bağlı olduğu nesne mi kontrol et
-                if (hit.collider.gameObject == gameObject)
-                {
-                    isDragging = true;
-
-                    // Fare pozisyonu ve nesnenin başlangıç pozisyonu arasındaki ofseti hesapla
-                    offset = transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                }
+                // Eğer tıklanan nesne bu script'i içeriyorsa, sürükleme modunu başlat.
+                isDragging = true;
             }
         }
-
-        // Sol fare tuşu basılı tutulduğunda
-        if (isDragging && Input.GetMouseButton(0))
+        else if (Input.GetMouseButtonUp(0))
         {
-            // Fare pozisyonunu dünya koordinatlarına dönüştürme
-            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-            // Y ekseni üzerinde takip etmemek için sadece x ekseni pozisyonunu güncelle
-            transform.position = new Vector3(mousePosition.x + offset.x, transform.position.y, transform.position.z);
+            // Fare bırakıldığında sürükleme modunu kapat.
+            isDragging = false;
         }
 
-        // Sol fare tuşu bırakıldığında
-        if (Input.GetMouseButtonUp(0))
+        if (isDragging)
         {
-            isDragging = false;
+            // Fare pozisyonunu ekran koordinatlarından dünya koordinatlarına dönüştür.
+            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10f));
+
+            // Nesnenin yeni konumunu güncelle.
+            rb.MovePosition(new Vector3(mousePosition.x, transform.position.y, mousePosition.z));
         }
     }
 }
