@@ -4,18 +4,26 @@ using UnityEngine;
 
 public class Food : MonoBehaviour
 {
-    private bool isDragging = false;
+    public bool isDragging = false;
     private Rigidbody rb;
+    public bool isItOkForTrigger = true;
 
-    void Start()
+
+    void Awake()
     {
-
         // Eğer nesnenin üzerinde Rigidbody bileşeni yoksa ekleyelim.
         if (!TryGetComponent(out rb))
         {
             rb = gameObject.AddComponent<Rigidbody>();
-           // rb.isKinematic = false; // Nesnenin fiziksel davranışını etkinleştirir.
+            // rb.isKinematic = false; // Nesnenin fiziksel davranışını etkinleştirir.
         }
+    }
+
+
+    void Start()
+    {
+
+        
     }   
 
     void Update()
@@ -38,7 +46,7 @@ public class Food : MonoBehaviour
             isDragging = false;
         }
 
-        if (isDragging)
+        if (isDragging && isItOkForTrigger)
         {
             // Fare pozisyonunu ekran koordinatlarından dünya koordinatlarına dönüştür.
             Vector3 mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10f));
