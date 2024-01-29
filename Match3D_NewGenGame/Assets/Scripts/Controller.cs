@@ -33,44 +33,65 @@ public class Controller : MonoBehaviour
         
     }
 
-   
+    
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
 
-        if (other != null)  
+        if (other != null && !other.CompareTag("Plane"))  
         {
              
             if (isGameObjectOneEmpty)
             {
-                food.isItOkForTrigger = false; // suruklemeyi kapat
+                food.isItOkForDragging = false; // suruklemeyi kapat
                 other.transform.position = Vector3.Lerp(other.transform.position, ControllerPositions[0].transform.position, Time.deltaTime *  lerpSpeed);
-
-                //obje sabitlenmeli ki yeri degismesin
-                foodRB = other.gameObject.GetComponent<Rigidbody>();
-                foodRB.constraints = RigidbodyConstraints.FreezePositionX;
-                foodRB.constraints = RigidbodyConstraints.FreezePositionZ;
-
-                addedFood.Add(other.gameObject); // obje eklendi
-                food.isItOkForTrigger = true; // suruklemeyi ac
-
-                //objeyi tutmam lazim bekletmem lazim yok etmek icin
                 isGameObjectOneEmpty = false; //Konum 1 doldu.
-            }
-            else if(isGameObjectTwoEmpty)
-            {
-                food.isItOkForTrigger = false; // suruklemeyi kapat
-                other.transform.position = Vector3.Lerp(other.transform.position, ControllerPositions[1].transform.position, Time.deltaTime * lerpSpeed);
 
                 //obje sabitlenmeli ki yeri degismesin
                 foodRB = other.gameObject.GetComponent<Rigidbody>();
                 foodRB.constraints = RigidbodyConstraints.FreezePositionX;
                 foodRB.constraints = RigidbodyConstraints.FreezePositionZ;
 
-                food.isItOkForTrigger = true; // suruklemeyi ac
+                //objeyi tutmam lazim bir degerin icinde bekletmem lazim yok etmek icin
                 addedFood.Add(other.gameObject); // obje eklendi
-                //objeyi tutmam lazim bekletmem lazim yok etmek icin
+                food.isItOkForDragging = true; // suruklemeyi ac
+
+              
+                
+
+                //Eger koymaktan vazgecerse
+               // if(other.transform.position != ControllerPositions[0].transform.position) //yerini degistirmis demektir
+              //  {
+               //     addedFood.Remove(other.gameObject); //koyudugun itemi sil.
+               //     isGameObjectOneEmpty = true; //yer artik bosaldi.
+              //  }
+            }
+            else if(isGameObjectTwoEmpty && isGameObjectOneEmpty == false)
+            {
+                food.isItOkForDragging = false; // suruklemeyi kapat
+                other.transform.position = Vector3.Lerp(other.transform.position, ControllerPositions[1].transform.position, Time.deltaTime * lerpSpeed);
                 isGameObjectTwoEmpty = false; //Konum 2 doldu.
+
+                //obje sabitlenmeli ki yeri degismesin
+                foodRB = other.gameObject.GetComponent<Rigidbody>();
+                foodRB.constraints = RigidbodyConstraints.FreezePositionX;
+                foodRB.constraints = RigidbodyConstraints.FreezePositionZ;
+
+                food.isItOkForDragging = true; // suruklemeyi ac
+
+                //objeyi tutmam lazim bir degerin icinde bekletmem lazim yok etmek icin
+                addedFood.Add(other.gameObject); // obje eklendi
+
+               
+                
+
+                //Eger koymaktan vazgecerse
+               // if (other.transform.position != ControllerPositions[1].transform.position) //yerini degistirmis demektir
+               // {
+                //    addedFood.Remove(other.gameObject); //koyudugun itemi sil.
+               //     isGameObjectOneEmpty = true; //yer artik bosaldi.
+               // }
+
             }
 
             if(isGameObjectOneEmpty == false && isGameObjectOneEmpty == false) // IKI ALANDA DOLDU ISE.
@@ -81,8 +102,10 @@ public class Controller : MonoBehaviour
                 {
                     foreach (var item in addedFood)
                     {
+                        Debug.Log("sa");
                       Collider foodCollider =  item.gameObject.GetComponent<Collider>();
                       foodCollider.isTrigger = true; //Asaya dusup sanki yok oluyomus efekti. Match3D'de oldugu gibi
+                      
                     }
 
                     ClearList();
@@ -90,14 +113,6 @@ public class Controller : MonoBehaviour
                     isGameObjectTwoEmpty = true; //Konum 2 bosaldi.
                 }
 
-                       
-                    
-                
-
-                
-                
-
-               
             }
             
         }
@@ -107,18 +122,21 @@ public class Controller : MonoBehaviour
 
     bool CheckTags()
     {
+       
+
         string firstTag = addedFood[0].tag; //ilk tagi aldim
         for (int i = 1; i < addedFood.Count; i++)
         {
             // Eğer bir tag farklıysa, false döndür
-            if (addedFood[i].tag != firstTag)
+            if (addedFood[i].tag == firstTag && 1<addedFood.Count)
             {
-                return false;
+                return true;
             }
         }
 
         // Tüm objelerin tag'leri aynıysa true döndür
-        return true;
+
+        return false;
     }
 
     void ClearList()

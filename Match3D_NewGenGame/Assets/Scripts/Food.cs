@@ -6,7 +6,7 @@ public class Food : MonoBehaviour
 {
     public bool isDragging = false;
     private Rigidbody rb;
-    public bool isItOkForTrigger = true;
+    public bool isItOkForDragging = true;
 
 
     void Awake()
@@ -46,7 +46,7 @@ public class Food : MonoBehaviour
             isDragging = false;
         }
 
-        if (isDragging && isItOkForTrigger)
+        if (isDragging && isItOkForDragging)
         {
             // Fare pozisyonunu ekran koordinatlarından dünya koordinatlarına dönüştür.
             Vector3 mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10f));
