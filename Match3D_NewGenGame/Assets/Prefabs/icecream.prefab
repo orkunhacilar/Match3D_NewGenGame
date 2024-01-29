@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: icecream
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 6da9d5cde97ad394e97f1227e5fbf342, type: 3}
+      propertyPath: m_TagString
+      value: Food
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6da9d5cde97ad394e97f1227e5fbf342, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.6
@@ -131,3 +135,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b075bd070dbf24796bd2055cc3a1b692, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDragging: 0
+  isItOkForTrigger: 1

@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: garlic
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 643b9bf033a68bd4fb7df391ed53589a, type: 3}
+      propertyPath: m_TagString
+      value: Food
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 643b9bf033a68bd4fb7df391ed53589a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4.7999997
@@ -131,3 +135,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b075bd070dbf24796bd2055cc3a1b692, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDragging: 0
+  isItOkForTrigger: 1
