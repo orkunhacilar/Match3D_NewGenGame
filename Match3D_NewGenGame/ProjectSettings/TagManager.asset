@@ -3,7 +3,25 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Food
+  - acorn
+  - apple
+  - banana
+  - cake
+  - candy
+  - carrot
+  - cherry
+  - egg
+  - garlic
+  - grape
+  - ham
+  - hamburger
+  - icecream
+  - kiwi
+  - lemon
+  - mushroom
+  - Plane
   layers:
   - Default
   - TransparentFX

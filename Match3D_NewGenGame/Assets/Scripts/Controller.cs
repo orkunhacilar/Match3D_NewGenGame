@@ -13,6 +13,7 @@ public class Controller : MonoBehaviour
     private BoxCollider boxCollider;
     private List<GameObject> addedFood = new List<GameObject>();
     Rigidbody foodRB;
+    GameObject ControlFood;
 
     Food food;
 
@@ -27,16 +28,31 @@ public class Controller : MonoBehaviour
 
     }
 
+
     // Update is called once per frame
     void Update()
     {
-        
+        //Eger koymaktan vazgecerse
+        if (isGameObjectOneEmpty == false && ControlFood.transform.position != ControllerPositions[0].transform.position)
+        {
+            addedFood.Remove(ControlFood.gameObject); //koyudugun itemi sil.
+            isGameObjectOneEmpty = true; //yer artik bosaldi.
+        }
+        else if (isGameObjectTwoEmpty == false && ControlFood.transform.position != ControllerPositions[0].transform.position)
+        {
+            addedFood.Remove(ControlFood.gameObject); //koyudugun itemi sil.
+            isGameObjectTwoEmpty = true; //yer artik bosaldi.
+        }
     }
 
-    
+
+    //OnTriggerStay
+    //OnTriggerEnter
+
 
     private void OnTriggerEnter(Collider other)
     {
+        ControlFood = other.gameObject;
 
         if (other != null && !other.CompareTag("Plane"))  
         {
@@ -46,55 +62,25 @@ public class Controller : MonoBehaviour
                 food.isItOkForDragging = false; // suruklemeyi kapat
                 other.transform.position = Vector3.Lerp(other.transform.position, ControllerPositions[0].transform.position, Time.deltaTime *  lerpSpeed);
                 isGameObjectOneEmpty = false; //Konum 1 doldu.
-
-                //obje sabitlenmeli ki yeri degismesin
-                foodRB = other.gameObject.GetComponent<Rigidbody>();
-                foodRB.constraints = RigidbodyConstraints.FreezePositionX;
-                foodRB.constraints = RigidbodyConstraints.FreezePositionZ;
-
-                //objeyi tutmam lazim bir degerin icinde bekletmem lazim yok etmek icin
-                addedFood.Add(other.gameObject); // obje eklendi
-                food.isItOkForDragging = true; // suruklemeyi ac
-
-              
-                
-
-                //Eger koymaktan vazgecerse
-               // if(other.transform.position != ControllerPositions[0].transform.position) //yerini degistirmis demektir
-              //  {
-               //     addedFood.Remove(other.gameObject); //koyudugun itemi sil.
-               //     isGameObjectOneEmpty = true; //yer artik bosaldi.
-              //  }
             }
-            else if(isGameObjectTwoEmpty && isGameObjectOneEmpty == false)
+            else
             {
                 food.isItOkForDragging = false; // suruklemeyi kapat
                 other.transform.position = Vector3.Lerp(other.transform.position, ControllerPositions[1].transform.position, Time.deltaTime * lerpSpeed);
-                isGameObjectTwoEmpty = false; //Konum 2 doldu.
+                isGameObjectTwoEmpty = false;
+            }
 
                 //obje sabitlenmeli ki yeri degismesin
                 foodRB = other.gameObject.GetComponent<Rigidbody>();
                 foodRB.constraints = RigidbodyConstraints.FreezePositionX;
                 foodRB.constraints = RigidbodyConstraints.FreezePositionZ;
 
-                food.isItOkForDragging = true; // suruklemeyi ac
-
                 //objeyi tutmam lazim bir degerin icinde bekletmem lazim yok etmek icin
                 addedFood.Add(other.gameObject); // obje eklendi
+                food.isItOkForDragging = true; // suruklemeyi ac
 
-               
-                
 
-                //Eger koymaktan vazgecerse
-               // if (other.transform.position != ControllerPositions[1].transform.position) //yerini degistirmis demektir
-               // {
-                //    addedFood.Remove(other.gameObject); //koyudugun itemi sil.
-               //     isGameObjectOneEmpty = true; //yer artik bosaldi.
-               // }
-
-            }
-
-            if(isGameObjectOneEmpty == false && isGameObjectOneEmpty == false) // IKI ALANDA DOLDU ISE.
+            if (isGameObjectOneEmpty == false && isGameObjectTwoEmpty == false) // IKI ALANDA DOLDU ISE.
             {
                 //iki objeyide yok et iki yeride online yap.
 
